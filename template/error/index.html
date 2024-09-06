@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found</title>
+
+     <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap.css') }}">
+    <style>
+        /* 自定义样式 */
+        body {
+            background-color: #007bff; /* 蓝色背景 */
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .error-container {
+            text-align: center;
+        }
+        .error-code {
+            font-size: 10rem;
+            font-weight: bold;
+        }
+        .error-message {
+            font-size: 1.5rem;
+        }
+        .home-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">{{status_code}}</div>
+        <div class="error-message">访问错误</div>
+        <button class="home-button btn btn-primary" onclick="get_url()">跳转</button>
+    </div>
+    <script>
+        const get_url=()=>{
+            window.location.href="{{url}}"
+        }
+    </script>
+</body>
+</html>
