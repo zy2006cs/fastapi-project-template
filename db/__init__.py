@@ -1,5 +1,5 @@
 from tortoise.queryset import QuerySetSingle
-from .models import Item
+from .models import User
 from typing import Optional,List
 def to_dict(model:QuerySetSingle=None,fields_data:Optional[list]=None)->dict:
 
