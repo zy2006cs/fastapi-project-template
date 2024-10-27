@@ -13,7 +13,6 @@ class MutilAMiddleware(BaseHTTPMiddleware):
         response.headers['Access-Control-Allow-Headers'] = ', '.join(conf.ALLOW_HEADERS)
         cache=response.headers.get('cache')
         body_size=0
-
         if cache is not None or body_size >= 1024:
            del response.headers['cache']
            response.headers['Cache-Control'] = conf.CACHE_TIME

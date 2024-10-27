@@ -42,7 +42,7 @@
 
 ```bash
 git clone https://gitee.com/yuanmeng6666/fastapi-project-template.git
-cd fastapi-project-template
+cd fastapi-project-templates
 ```
 ### 2.运行项目
 ``` bash
