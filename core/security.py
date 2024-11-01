@@ -1,6 +1,6 @@
 from fastapi.security.oauth2 import OAuth2PasswordBearer
 from fastapi.exceptions import HTTPException
-from fastapi import Depends
+from fastapi import Depends,Request
 from core.setting import conf
 from datetime import timedelta, datetime
 from typing import Dict
@@ -14,7 +14,6 @@ class Authentication(PyJWT):
         self.key = conf.SERCT_KEY
         self.algorithm = conf.ALGORITHM
         super().__init__()
-
     def create_access_token(self, payload: Dict, expires=timedelta(hours=24)) -> str:
         payload['exp'] = (datetime.now() + expires).timestamp()
         payload = self.__create_signature__(payload)
@@ -26,7 +25,6 @@ class Authentication(PyJWT):
             algorithm_data = [self.algorithm]
         else:
             raise HTTPException(status_code=401, detail={"code": 401, "message": 'Invalid token'})
-
         try:
             payload = super().decode(token, algorithms=algorithm_data, key=self.key)
             if payload['exp'] < datetime.now().timestamp():
@@ -49,16 +47,19 @@ class Authentication(PyJWT):
         payload['signature'] = signature
         return payload
 
-    def Certification(self, token: str = Depends(Scheme)) -> Dict:
-        return self.decode_token(token)
+    def Certification(self, request:Request,token: str = Depends(Scheme)) -> Dict:
+        accessList=['all','add','delete','get','put','open']
+        f=self.decode_token(token)
+        description:str =request.scope.get("route").description
+        key=description.split(':')
+        if len(key)<2 or not (key[0] in accessList):
+            raise HTTPException(status_code=403,detail={'message':'权限错误'})
+        if key[0]=='open':
+            return f
 
-    def router_Certification(self, data: Dict = Depends(Certification)) -> Dict:
-        """
-        考虑到光是解码 JWT，并不能准确识别这个用户的身份状态，
-        本方法用于扩展逻辑，
-        :return: Dict
-        """
-        return data
+        return f
 
-auth = Authentication()
-#使用单列模式进行开发!!!
+'''
+规则 all add delete get put open
+'''
+

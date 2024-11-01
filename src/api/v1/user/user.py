@@ -1,22 +1,13 @@
-from fastapi import  Depends
-from core.security import auth
+from urllib.request import Request
+
+from fastapi import Depends
 from utils.service import ServiceRouter
-from utils.redis_cli import get_redis_client,RedisClient
+def get():
+    return '111'
 class UserRouter(ServiceRouter):
     def __init__(self):
-        super().__init__('/users')
+        super().__init__('/users',data={'description':{'post':'open:获取当前信息'},'summary':{"get":"测试接口1"}})
+    async def post(self,jwt=Depends(ServiceRouter.auth.Certification)):
 
-    def get(self,):
+        return self.res()
 
-        return self.res(data=['成功'])
-class UserInfoRouter(ServiceRouter):
-    def __init__(self):
-        super().__init__('/user_info')
-    async def get(self,data: dict = Depends(auth.Certification)):
-        return self.res(data=['成功'])
-router_data=[UserRouter().router,UserInfoRouter().router]
-#批量注册
-#单个注册直接router=xxxx
-'''
-只有使用router_data和router才能进行注册
-'''

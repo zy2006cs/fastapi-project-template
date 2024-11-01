@@ -20,5 +20,6 @@ class Setting(Cors):
     WRITER_LOG:bool=False#是否开启日志
     INDEX_URL:Optional[str]='/docs'#常规错误视图跳转url
     DOCS_URL:Optional[str]='/docs'
-    GENERAL_STATUS_CODE_DATA:List=[404,400,500,405,502,404]#常规错误视图处理
+    JSON_STATUS_CODE_DAT:List=[401,]
+    GENERAL_STATUS_CODE_DATA:List=[404,400,500,405,502,404,401]#常规错误视图处理
 conf=Setting()#oautu2获取access_token接口

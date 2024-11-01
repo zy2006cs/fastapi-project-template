@@ -1,6 +1,7 @@
 from tortoise.queryset import QuerySetSingle
-from .models import User
+
 from typing import Optional,List
+from .models import User,Roles,Permissions
 def to_dict(model:QuerySetSingle=None,fields_data:Optional[list]=None)->dict:
 
     model_keys = ['_partial', '_saved_in_db', '_custom_generated_pk', '_await_when_save']

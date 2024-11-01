@@ -3,7 +3,7 @@ from typing import Optional, Union, Dict, List
 from models.responseModel import Res as res_Model
 from datetime import datetime
 def response_data(
-        data: Optional[Union[Dict, List]]=None,
+        data: Optional[Union[Dict, List]]=[],
         code: int = 200,
         message: str = 'success',
         mimetype: str = 'application/json',
@@ -20,7 +20,7 @@ def response_data(
         code=code,
         timestamp=datetime.now().strftime("%Y-%m-%d %H:%M"),
     )
-    if res_content.code !=200:
+    if res_content.code!=200:
         res_content.error=res_content.message
         res_content.message=None
     content=res_content.json()
