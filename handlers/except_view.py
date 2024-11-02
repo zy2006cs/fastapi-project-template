@@ -13,4 +13,4 @@ async def General_Error_View(request: Request, exc: HTTPException):
                 return response_data(code=exc.status_code,message=exc.detail['message'])
             return templates.TemplateResponse("error/index.html", {"request": request, "status_code":exc.status_code,'url':conf.INDEX_URL})
     except AttributeError:
-        return response_data(code=200,message=str(exc))
+        return response_data(code=500,message=str(exc))

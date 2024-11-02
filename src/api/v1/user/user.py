@@ -1,13 +1,12 @@
-from urllib.request import Request
-
-from fastapi import Depends
+from db import to_dict,to_list_dict
+from fastapi import Depends,Request
 from utils.service import ServiceRouter
-def get():
-    return '111'
 class UserRouter(ServiceRouter):
     def __init__(self):
-        super().__init__('/users',data={'description':{'post':'open:获取当前信息'},'summary':{"get":"测试接口1"}})
-    async def post(self,jwt=Depends(ServiceRouter.auth.Certification)):
-
-        return self.res()
-
+        super().__init__('/userinfo',data={'description':{'get':'get:获取当前信息'}})
+    async def get(self,user=Depends(ServiceRouter.auth.Certification)):
+        role=(await user.role)[0]
+        data=to_dict(user,fields_data=['password','create_time','_role'])
+        data['role_id']=role.id
+        data['name']=role.name
+        return self.res(data=data)

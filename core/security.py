@@ -4,7 +4,9 @@ from fastapi import Depends,Request
 from core.setting import conf
 from datetime import timedelta, datetime
 from typing import Dict
+from db import User
 from utils.encrypto import create_md5
+from .Permissions import Permissions
 from jwt import PyJWT
 
 Scheme = OAuth2PasswordBearer(tokenUrl=conf.TOKEN_URL)
@@ -47,17 +49,20 @@ class Authentication(PyJWT):
         payload['signature'] = signature
         return payload
 
-    def Certification(self, request:Request,token: str = Depends(Scheme)) -> Dict:
+    async def Certification(self, request:Request,token: str = Depends(Scheme)) -> User:
         accessList=['all','add','delete','get','put','open']
         f=self.decode_token(token)
-        description:str =request.scope.get("route").description
-        key=description.split(':')
-        if len(key)<2 or not (key[0] in accessList):
-            raise HTTPException(status_code=403,detail={'message':'权限错误'})
-        if key[0]=='open':
-            return f
-
-        return f
+        route=request.scope.get("route")
+        description: str = route.description
+        key = description.split(':')
+        permissions = Permissions()
+        if len(key) < 2 or not (key[0] in accessList):
+            raise HTTPException(status_code=403, detail={'message': '权限错误'})
+        user = await permissions.get_username(f['username'])
+        if key[0] == 'open':
+            return user
+        await permissions.get_rules(path=str(request.url).replace(str(request.base_url),'/'),user=user,rule=key[0])
+        return user
 
 '''
 规则 all add delete get put open
