@@ -70,7 +70,7 @@
 ### 1. 克隆项目
 
 ```bash
-git clone https://gitee.com/yuanmeng6666/fastapi-project-template.git
+git https://github.com/zy2006cs/fastapi-project-template.git
 cd fastapi-project-templates
 ```
 ### 2.环境配置
